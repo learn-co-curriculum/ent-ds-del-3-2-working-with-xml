@@ -3,7 +3,7 @@
 
 
 ## Introduction
-When you retrieve information from an API, it is often stored in either an XML or a JSON format. In this lesson, we look at what XML is, the problems it solves, and provide a litle hands on experience working with it. 
+When you retrieve information from an API, it is often stored in either an XML or a JSON format. In this lesson, we look at what XML is, the problems it solves, and provide some hands on experience working with it. 
 
 ## Objectives
 You will be able to:
@@ -52,7 +52,7 @@ It's important to understand the kinds of problems that XML *(or JSON - they bot
 Unstructured data is something like a book or an essay - lots of words, but free form text. While unstructured data can be contained within an XML document, the strength of XML documents is in describing structured information. Structured information is where the information is broken down into types of data. So for example, I could write an unstructured essay describing a person, but I could also create a structured document describing attributes of the person such as their first name, last name, date of birth and home phone number. Such a document could be a good use case for being stored in an XML file.
 
 ### Best for Hierarchical Data
-Lets say we wanted to store structured information on a list of people with their first name, last name and phone number. How could we store that? We would probably do what we've done to date. Have a csv file with column names in the first row. That would be easy to read (for either a person or a computer) and would work perfectly. So for simple structured data (that fits neatly into a simple single sheet in a spreadsheet with one type of data per column), you probably don't need to use XML *(although sometimes such information is provided via XML anyway)*.
+Lets say we wanted to store structured information on a list of people with their first name, last name and phone number. How could we store that? We would probably do what we've done to date. Have a csv file with column names in the first row. That would be easy to read (for either a person or a computer) and would work perfectly. So for simple structured data (that fits neatly into a simple single sheet in a spreadsheet with one type of data per column), you probably don't need to use XML *(although sometimes such information is provided using XML anyway)*.
 
 The real strength of XML is for hierarchical data. Imagine now that we have information about a list of people. But in addition to having their first name, last name and phone number, we also have a list of one or more addresses for each person. Now how would we store and share that information?
 
@@ -230,7 +230,7 @@ df.head ()
 Great, now create a DataFrame that contains the first name, last name and phone for every person:
 
 ## Extra Credit (1)
-Sometimes you need to perform more complex transformations to create the DataFrame you want. Write some code to create a DataFrame with one row per address, containing the first name, last name and all of the address information for each address (anyone without an address simply won't show up in the DataFrame).
+Sometimes you need to perform more complex transformations to create the DataFrame you want. Write some code to create a DataFrame with one row per address, containing the first name, last name and all of the address information for each address *(anyone without an address simply won't show up in the DataFrame)*.
 
 ## Extra Credit (2)
 There is another file in this directory - `nyc_2001_campaign_finance.xml`. Open the file using Python, explore it using an iterator, and create a DataFrame containing the Candidate Name, Primary Pay, General Pay, Runoff Pay and Total Pay for each candidate.
