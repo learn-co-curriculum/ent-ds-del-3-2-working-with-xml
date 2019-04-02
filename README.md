@@ -12,7 +12,7 @@ You will be able to:
 
 ## eXtensible Markup Language
 
-XML (eXtensible Markup Language) is a way of taking information and making it very easy for computers to read and process it. Here is an example.
+XML (eXtensible Markup Language) is a way of taking information and making it very easy for computers to read and process it. Here is an example:
 
 ```
 <people>
