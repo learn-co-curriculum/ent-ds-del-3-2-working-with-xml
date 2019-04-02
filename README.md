@@ -300,7 +300,36 @@ print(cities)
 
 OK, now it's your turn! Start by iterating over the document and creating & printing a list of first names:
 
+
+```python
+firstnames = []
+for person in root:
+    for element in person:
+        if element.tag == "firstname":
+            firstnames.append(element.text)
+print(firstnames)
+```
+
+    ['Jane', 'Joe', 'Alison']
+
+
 Great, now go in and create a list of the states that the people have an address in:
+
+
+```python
+states = []
+for person in root:
+    for element in person:
+        if element.tag == "addresses":
+            for address in element:
+                for item in address:
+                    if item.tag == "state":
+                        states.append(item.text)
+print(states)
+```
+
+    ['NJ', 'NJ', 'NJ', 'NJ']
+
 
 There are some other ways of working with XML files. In addition to just iterating over all of the elements under a given node, you can also find elements by name and retrieve their values by calling `.text`. So if you wanted a list of first names, you could do the following:
 
@@ -316,6 +345,17 @@ print(first_names)
 
 
 Now it's your turn! Create a list of full names (hint, you'll have to concatenate the first name, a space and then the last name for every full name):
+
+
+```python
+full_names = []
+for person in root:
+    full_names.append(person.find('firstname').text + " " + person.find('lastname').text)
+print(full_names)
+```
+
+    ['Jane Anderson', 'Joe Sonos', 'Alison Demming']
+
 
 OK, in practice, you're usually going to want to create a DataFrame from your XML file. Here is the code to create a DataFrame containing the first and last names for each person:
 
@@ -379,6 +419,70 @@ df.head ()
 
 
 Great, now create a DataFrame that contains the first name, last name and phone for every person:
+
+
+```python
+dfcols = ['firstname', 'lastname', 'phone']
+df = pd.DataFrame(columns=dfcols)
+
+for person in root:
+    firstname = person.find('firstname').text
+    lastname = person.find('lastname').text
+    phone = person.find('phone').text
+    df = df.append(pd.Series([firstname, lastname, phone], index=dfcols), ignore_index=True)
+df.head ()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>firstname</th>
+      <th>lastname</th>
+      <th>phone</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Jane</td>
+      <td>Anderson</td>
+      <td>111-111-1111</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Joe</td>
+      <td>Sonos</td>
+      <td>111-111-1111</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Alison</td>
+      <td>Demming</td>
+      <td>111-111-1111</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 ## Extra Credit (1)
 Sometimes you need to perform more complex transformations to create the DataFrame you want. Write some code to create a DataFrame with one row per address, containing the first name, last name and all of the address information for each address *(anyone without an address simply won't show up in the DataFrame)*.
@@ -469,6 +573,109 @@ addresses.head ()
 
 ## Extra Credit (2)
 There is another file in this directory - `nyc_2001_campaign_finance.xml`. Open the file using Python, explore it using an iterator, and create a DataFrame containing the Candidate Name, Primary Pay, General Pay, Runoff Pay and Total Pay for each candidate.
+
+
+```python
+import pandas as pd
+import xml.etree.ElementTree as ET
+
+tree = ET.parse('nyc_2001_campaign_finance.xml')
+root = tree.getroot()
+print(type(root))
+
+dfcols = ['candname', 'primarypay', 'generalpay', 'runoffpay', 'totalpay']
+candidates = pd.DataFrame(columns=dfcols)
+
+iterrows = iter(root.find("row"))
+next(iterrows)
+for row in iterrows:
+    candname = row.find("candname").text
+    primarypay = row.find("primarypay").text
+    generalpay = row.find("generalpay").text
+    runoffpay = row.find("runoffpay").text
+    totalpay = row.find("totalpay").text
+    candidates = candidates.append(pd.Series([candname, primarypay, generalpay, runoffpay, totalpay], index=dfcols), ignore_index=True)
+candidates.head ()
+
+```
+
+    <class 'xml.etree.ElementTree.Element'>
+
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>candname</th>
+      <th>primarypay</th>
+      <th>generalpay</th>
+      <th>runoffpay</th>
+      <th>totalpay</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Aboulafia, Sandy</td>
+      <td>45410.00</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45410.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adams, Jackie R</td>
+      <td>11073.00</td>
+      <td>0</td>
+      <td>0</td>
+      <td>11073.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Addabbo, Joseph P</td>
+      <td>75350.00</td>
+      <td>73970.00</td>
+      <td>0</td>
+      <td>149320.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Alamo-Estrada, Agustin</td>
+      <td>25000.00</td>
+      <td>2400.00</td>
+      <td>0</td>
+      <td>27400.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Allen, William A</td>
+      <td>62990.00</td>
+      <td>0</td>
+      <td>0</td>
+      <td>62990.00</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 ## Summary
 
