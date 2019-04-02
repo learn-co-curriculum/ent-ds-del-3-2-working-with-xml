@@ -126,6 +126,9 @@ root = tree.getroot()
 print(type(root))
 ```
 
+    <class 'xml.etree.ElementTree.Element'>
+
+
 OK, now lets go look at the elements within the root of the XML document. It is a collection that is iterable, so we can iterate over the elements within the document using the `for ... in` syntax we learned earlier for looping over collections. Lets start by printing out all of the top level elements, just to see what the content looks like:
 
 
@@ -133,6 +136,11 @@ OK, now lets go look at the elements within the root of the XML document. It is 
 for child in root:
     print(child.tag, child.attrib)
 ```
+
+    person {}
+    person {}
+    person {}
+
 
 OK, that's a start. So we know the root (people) is comprised of a set of person tags. Now lets see if we can dig down into those tags to start to retrieve useful information.
 
@@ -146,6 +154,32 @@ for person in root:
     print('\n')
 ```
 
+    person {}
+    Elements:
+    	 firstname {} Jane
+    	 lastname {} Anderson
+    	 phone {'type': 'cell'} 111-111-1111
+    	 addresses {} None
+    
+    
+    person {}
+    Elements:
+    	 firstname {} Joe
+    	 lastname {} Sonos
+    	 phone {'type': 'office'} 111-111-1111
+    	 addresses {} None
+    
+    
+    person {}
+    Elements:
+    	 firstname {} Alison
+    	 lastname {} Demming
+    	 phone {'type': 'home'} 111-111-1111
+    	 addresses {} None
+    
+    
+
+
 There are a few things going on in the code above. Firstly, the variable names we're using like person and element could be called anything else. The following code works equally well:
 
 
@@ -157,6 +191,32 @@ for duck in root:
         print('\t', elephant.tag, elephant.attrib, elephant.text)
     print('\n')
 ```
+
+    person {}
+    Elements:
+    	 firstname {} Jane
+    	 lastname {} Anderson
+    	 phone {'type': 'cell'} 111-111-1111
+    	 addresses {} None
+    
+    
+    person {}
+    Elements:
+    	 firstname {} Joe
+    	 lastname {} Sonos
+    	 phone {'type': 'office'} 111-111-1111
+    	 addresses {} None
+    
+    
+    person {}
+    Elements:
+    	 firstname {} Alison
+    	 lastname {} Demming
+    	 phone {'type': 'home'} 111-111-1111
+    	 addresses {} None
+    
+    
+
 
 All Python knows is that root contains a collection of things we can iterate over, and some of those in turn contain a collection of other things that we can iterate over. What we call them doesn't matter to the computer, although it's a good idea to use meaningful names for variables so you can remember what your code was supposed to do when you come back to it later.
 
@@ -170,6 +230,41 @@ for element in root.iter():
     print(element.tag, element.attrib, element.text)
 ```
 
+    people {} 
+    
+    person {} None
+    firstname {} Jane
+    lastname {} Anderson
+    phone {'type': 'cell'} 111-111-1111
+    addresses {} None
+    person {} None
+    firstname {} Joe
+    lastname {} Sonos
+    phone {'type': 'office'} 111-111-1111
+    addresses {} None
+    address {'type': 'home'} None
+    street {} 27 Magnolia Steet
+    city {} Maplewood
+    state {} NJ
+    address {'type': 'work'} None
+    street {} 4 Main Street
+    city {} Montclair
+    state {} NJ
+    person {} None
+    firstname {} Alison
+    lastname {} Demming
+    phone {'type': 'home'} 111-111-1111
+    addresses {} None
+    address {'type': 'home'} None
+    street {} 27 Magnolia Steet
+    city {} Maplewood
+    state {} NJ
+    address {'type': 'work'} None
+    street {} 12 Main Street
+    city {} Montclair
+    state {} NJ
+
+
 OK, so let's try to do something useful. Let's retrieve the phone number for each of the people and put them all in a list . . .
 
 
@@ -181,6 +276,9 @@ for person in root:
             phone_numbers.append(element.text)
 print(phone_numbers)
 ```
+
+    ['111-111-1111', '111-111-1111', '111-111-1111']
+
 
 Great - now lets try to get a list of addresses - lets just take the cities and make a list of them first.
 
@@ -197,6 +295,9 @@ for person in root:
 print(cities)
 ```
 
+    ['Maplewood', 'Montclair', 'Maplewood', 'Montclair']
+
+
 OK, now it's your turn! Start by iterating over the document and creating & printing a list of first names:
 
 Great, now go in and create a list of the states that the people have an address in:
@@ -210,6 +311,9 @@ for person in root:
     first_names.append(person.find('firstname').text)
 print(first_names)
 ```
+
+    ['Jane', 'Joe', 'Alison']
+
 
 Now it's your turn! Create a list of full names (hint, you'll have to concatenate the first name, a space and then the last name for every full name):
 
@@ -227,10 +331,141 @@ for person in root:
 df.head ()
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>firstname</th>
+      <th>lastname</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Jane</td>
+      <td>Anderson</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Joe</td>
+      <td>Sonos</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Alison</td>
+      <td>Demming</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 Great, now create a DataFrame that contains the first name, last name and phone for every person:
 
 ## Extra Credit (1)
 Sometimes you need to perform more complex transformations to create the DataFrame you want. Write some code to create a DataFrame with one row per address, containing the first name, last name and all of the address information for each address *(anyone without an address simply won't show up in the DataFrame)*.
+
+
+```python
+dfcols = ['firstname', 'lastname', 'street', 'city', 'state']
+addresses = pd.DataFrame(columns=dfcols)
+
+for person in root:
+    firstname = person.find('firstname').text
+    lastname = person.find('lastname').text
+    for address in person.find('addresses'):
+        street = address.find('street').text
+        city = address.find('city').text
+        state = address.find('state').text
+        addresses = addresses.append(pd.Series([firstname, lastname, street, city, state], index=dfcols), ignore_index=True)
+addresses.head ()
+
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>firstname</th>
+      <th>lastname</th>
+      <th>street</th>
+      <th>city</th>
+      <th>state</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Joe</td>
+      <td>Sonos</td>
+      <td>27 Magnolia Steet</td>
+      <td>Maplewood</td>
+      <td>NJ</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Joe</td>
+      <td>Sonos</td>
+      <td>4 Main Street</td>
+      <td>Montclair</td>
+      <td>NJ</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Alison</td>
+      <td>Demming</td>
+      <td>27 Magnolia Steet</td>
+      <td>Maplewood</td>
+      <td>NJ</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Alison</td>
+      <td>Demming</td>
+      <td>12 Main Street</td>
+      <td>Montclair</td>
+      <td>NJ</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 ## Extra Credit (2)
 There is another file in this directory - `nyc_2001_campaign_finance.xml`. Open the file using Python, explore it using an iterator, and create a DataFrame containing the Candidate Name, Primary Pay, General Pay, Runoff Pay and Total Pay for each candidate.
