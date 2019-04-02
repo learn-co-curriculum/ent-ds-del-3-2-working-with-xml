@@ -217,6 +217,7 @@ OK, in practice, you're usually going to want to create a DataFrame from your XM
 
 
 ```python
+import pandas as pd
 dfcols = ['firstname', 'lastname']
 df = pd.DataFrame(columns=dfcols)
 
